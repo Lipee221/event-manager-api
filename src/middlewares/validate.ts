@@ -1,14 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
-import { ZodSchema } from 'zod';
 
-export const validate = (schema: ZodSchema<any>) => (req: Request, res: Response, next: NextFunction) => {
-  try {
-    schema.parse(req.body);
-    next();
-  } catch (error: any) {
-    return res.status(400).json({
-      error: 'Erro de validação',
-      issues: error.errors
-    });
-  }
+export const validate = (schema: any) => {
+  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      await schema.parseAsync(req.body);
+      next(); 
+    } catch (error) {
+      res.status(400).json({ error: error.errors.map((e: any) => e.message).join(', ') }); 
+    }
+  };
 };

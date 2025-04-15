@@ -1,4 +1,4 @@
-import prisma from "../../prisma/client";
+import prisma from "../prisma/client";
 
 export const createUser = async (data: {
   name: string;
@@ -12,3 +12,13 @@ export const createUser = async (data: {
 export const getAllUsers = async () => {
   return await prisma.user.findMany();
 };
+
+
+export async function getUsers() {
+  const users = await prisma.user.findMany();
+  return users;
+}
+
+
+
+

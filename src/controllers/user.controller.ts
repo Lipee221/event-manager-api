@@ -1,20 +1,23 @@
-import { Request, Response } from 'express';
-import { createUser, getAllUsers } from '../services/user.service';
+import { Request, Response, NextFunction } from 'express';
+import { createUser, getUsers } from '../services/user.service'; 
 
-export const createUserController = async (req: Request, res: Response) => {
+
+export const createUserController = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user = await createUser(req.body);
-    res.status(201).json(user);
+    const userData = req.body; 
+    const user = await createUser(userData); //
+    res.status(201).json(user); 
   } catch (error) {
-    res.status(400).json({ error: 'Erro ao criar usuário' });
+    next(error);
   }
 };
 
-export const getUsersController = async (_req: Request, res: Response) => {
+export const getUsersController = async (req: Request, res: Response) => {
   try {
-    const users = await getAllUsers();
-    res.status(200).json(users);
+    const users = await getUsers(); 
+    res.status(200).json(users); 
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar usuários' });
+    res.status(500).json({ error: "Erro ao buscar usuários." });
   }
 };
+
